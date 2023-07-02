@@ -6,6 +6,15 @@ import com.example.codingexercise.model.Product;
 
 public class ProductPackage extends Package {
     private List<Product> products;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private String id;
     private String name;
     private String description;
@@ -24,17 +33,6 @@ public class ProductPackage extends Package {
 
     public void setProducts(List<Product> productIds) {
         this.products = products;
-    }
-
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
     }
 
     @Override

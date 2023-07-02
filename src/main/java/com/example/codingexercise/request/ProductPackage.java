@@ -7,7 +7,7 @@ import com.example.codingexercise.model.Package;
 
 public class ProductPackage extends Package {
 
-    public ProductPackage(String id, String name, String description, List<String> productIds ){
+    public ProductPackage(String name, String description, List<String> productIds ){
         this.name = name;
         this.description = description;
         this.productIds = productIds;
