@@ -8,7 +8,10 @@ import com.example.codingexercise.repository.PackageRepository;
 import com.example.codingexercise.response.ProductPackage;
 import com.example.codingexercise.response.ServerResponse;
 import com.example.codingexercise.service.contracts.IPackageService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -84,7 +87,17 @@ public class PackageService implements IPackageService {
         // Asynchronous execution
         List<CompletableFuture<Product>> allFutures = new ArrayList<>();
         for (int i = 0; i < productPackageRequest.getProductIds().size(); i++) {
-            allFutures.add(this.productServiceGateway.getProduct(productPackageRequest.getProductIds().get(i)));
+            try{
+                allFutures.add(this.productServiceGateway.getProduct(productPackageRequest.getProductIds().get(i)));
+            }catch(HttpClientErrorException ex){
+                if(ex instanceof HttpStatusCodeException) {
+                   if(((HttpStatusCodeException) ex).getStatusCode().equals(HttpStatus.NOT_FOUND)){
+                       throw new BadRequestException(String.format("Invalid ProductId %s was provided", productPackageRequest.getProductIds().get(i)));
+                   }
+                }
+
+            }
+
         }
         long start = System.currentTimeMillis();
         Double totalPrice = 0.0;
